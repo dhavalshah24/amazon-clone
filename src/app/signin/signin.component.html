@@ -1,0 +1,30 @@
+<div class="container">
+    <img src="https://www.doorwaysva.org/wp-content/uploads/2020/08/amazon-logo-transparent.png" alt="amazon logo">
+    <form [formGroup]="signinForm">
+        <div class="form-group">
+            <div class="header">
+                <p>Sign-In</p>
+            </div>
+
+            <div class="inputFields">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" formControlName="email" id="email" name="email"
+                    autocomplete="off" required>
+                <small class="text-danger" *ngIf="email && email.invalid && email.touched">{{getEmailError()}}</small>
+            </div>
+            <div class="inputFields">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" formControlName="password" id="password" name="password"
+                    required>
+                <small class="text-danger" [class.d-none]="password && (password.valid || password.untouched)">Password
+                    is required</small>
+            </div>
+            <button class="btn" type="submit" (click)="signin()">Sign in</button>
+            <button class="btn" type="submit" (click)="signinWithGoogle()">Sign in with Google</button>
+            <hr>
+            <div class="bottomtext">
+                <p>Do not have an account? <a href="/signup">Sign up</a></p>
+            </div>
+        </div>
+    </form>
+</div>
