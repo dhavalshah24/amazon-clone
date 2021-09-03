@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { AngularFireAuth } from '@angular/fire/auth';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from "@angular/router"
 
 @Component({
@@ -12,7 +13,7 @@ import { Router } from "@angular/router"
 })
 export class SigninComponent implements OnInit {
 
-  constructor(private fb: FormBuilder, private router: Router, private fireAuth: AngularFireAuth) { }
+  constructor(private fb: FormBuilder, private router: Router, private fireAuth: AngularFireAuth, private db: AngularFirestore) { }
 
   ngOnInit(): void {
   }
@@ -60,9 +61,13 @@ export class SigninComponent implements OnInit {
   async signinWithGoogle() {
     try {
       const result = await this.fireAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-      if (result) {
+      const email = result.user?.email;
+      const snapshot = await this.db.collection("users").ref.where("email", "==", email).get();
+      if (!snapshot.empty) {
         console.log("Signin with Google successful");
         this.router.navigate(['/home']);
+      } else {
+        console.log("User does not exist. Sign up");
       }
     } catch (error) {
       console.log(error);

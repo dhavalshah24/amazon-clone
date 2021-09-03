@@ -22,7 +22,8 @@ export class SignupComponent implements OnInit {
     name: [null, [Validators.required]],
     email: [null, [Validators.required, Validators.email]],
     password: [null, [Validators.required, Validators.minLength(6)]],
-    userType: ["customer", [Validators.required]]
+    customer: [true, [Validators.required]],
+    seller: [false, [Validators.required]],
   })
 
   get email() {
@@ -56,7 +57,11 @@ export class SignupComponent implements OnInit {
   }
 
   async signup() {
-    if (this.email?.valid && this.name?.valid && this.password?.valid) {
+    if (this.email?.valid && this.name?.valid && this.password?.valid && (this.signupForm.value.customer || this.signupForm.value.seller)) {
+      var userType = []
+      if (this.signupForm.value.customer) userType.push("customer");
+      if (this.signupForm.value.seller) userType.push("seller");
+
       try {
         const { email, password, name } = this.signupForm.value;
         const result = await this.fireAuth.createUserWithEmailAndPassword(email, password);
@@ -65,7 +70,7 @@ export class SignupComponent implements OnInit {
           username,
           email,
           fullName: name,
-          userType: this.signupForm.value.userType
+          userType
         });
         console.log("Signup with Email-Password successful");
         this.router.navigate(['/home']);
@@ -81,23 +86,39 @@ export class SignupComponent implements OnInit {
   }
 
   async signupWithGoogle() {
-    // console.log(this.signupForm.value.userType);
-    try {
+    if (this.signupForm.value.customer || this.signupForm.value.seller) {
+      try {
 
-      const result = await this.fireAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-      const username = result.user?.email?.split("@")[0];
-      await this.db.collection("users").doc(result?.user?.uid).set({
-        username: username,
-        fullName: result?.user?.displayName,
-        email: result?.user?.email,
-        userType: this.signupForm.value.userType
-      });
-      console.log("Signup with Google successful");
-      this.router.navigate(['/home']);
-    } catch (error) {
-      console.log(error);
+        const result = await this.fireAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+        const email = result.user?.email;
+        const snapshot = await this.db.collection("users").ref.where("email", "==", email).get();
 
+        if (snapshot.empty) {
+          var userType = []
+          if (this.signupForm.value.customer) userType.push("customer");
+          if (this.signupForm.value.seller) userType.push("seller");
+
+          const username = result.user?.email?.split("@")[0];
+          await this.db.collection("users").doc(result?.user?.uid).set({
+            username: username,
+            fullName: result?.user?.displayName,
+            email: result?.user?.email,
+            userType
+          });
+          console.log("Signup with Google successful");
+          this.router.navigate(['/home']);
+        } else {
+          console.log("Email is already in use");
+
+        }
+
+      } catch (error) {
+        console.log(error);
+
+      }
+
+    } else {
+      alert("Select a user type");
     }
-
   }
 }
