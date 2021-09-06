@@ -12,13 +12,15 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
 import { HomeComponent } from './home/home.component';
+import { AddCouponComponent } from './add-coupon/add-coupon.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SignupComponent,
     SigninComponent,
-    HomeComponent
+    HomeComponent,
+    AddCouponComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,35 @@
+<div class="container">
+    <img src="https://www.doorwaysva.org/wp-content/uploads/2020/08/amazon-logo-transparent.png" alt="amazon logo">
+    <form [formGroup]="addCouponForm">
+        <div class="form-group">
+
+            <div class="header">
+                <p>Create Coupon</p>
+            </div>
+
+            <div class="inputFields">
+                <label for="coupon">Coupon</label>
+                <input type="text" class="form-control" formControlName="coupon" id="coupon" name="coupon"
+                    autocomplete="off" required>
+                <small class="text-danger" [class.d-none]="coupon && (coupon.valid || coupon.untouched)">Coupon is
+                    required</small>
+            </div>
+            <div class="inputFields">
+                <label for="discountRate">Discount Rate</label>
+                <input type="number" class="form-control" id="discountRate" formControlName="discountRate"
+                    name="discountRate" min="5" max="100" step="5" oninput="this.value = Math.abs(this.value)">
+            </div>
+
+            <div class="inputFields">
+                <label for="description">Description</label>
+                <textarea type="text" class="form-control" formControlName="description" id="description"
+                    name="description" autocomplete="off" required></textarea>
+                <small class="text-danger"
+                    [class.d-none]="description && (description.valid || description.untouched)">Description is
+                    required</small>
+            </div>
+
+            <button class="btn" type="submit" (click)="addCoupon()">Add Coupon</button>
+        </div>
+    </form>
+</div>

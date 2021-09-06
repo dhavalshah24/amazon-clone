@@ -1,0 +1,59 @@
+.container{
+    align-items: center;
+    text-align: center;
+    margin: auto;
+}
+
+img {
+    height: 150px;
+    width: 200px;
+    margin-top: -40px;
+}
+
+.form-group {
+    text-align: left;
+    border: 0.5px solid lightgray;
+    width: 30%;
+    margin: auto;
+    margin-top: -40px;
+    padding: 10px 20px;
+}
+
+.header p {
+    font-size: 25px;
+    font-weight: 500;
+}
+
+.form-group label {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+.form-group input {
+    height: 30px;
+    border: 0.5px solid gray;
+}
+
+.inputFields input:focus, textarea:focus {
+    border: 0.1px solid hsla(0, 86%, 45%, 0.959);
+    box-shadow: 0 0 10px hsla(0, 86%, 45%, 0.959);
+}
+
+.form-group input::placeholder {
+    font-size: 15px;
+    margin-left: -10px;
+}
+
+.form-group button {
+    border-radius: 2px;
+    background: #f0c14b;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    height: 30px;
+    border: 1px solid;
+    border-color: #a88734 #9c7e31 #846a29;
+    padding: 0px;
+}
