@@ -49,12 +49,12 @@ export class SigninComponent implements OnInit {
         if(result) {
           this.signinService.auth({email}).subscribe(
             res => {
-              localStorage.setItem('token', res.token);
+              localStorage.setItem("token", res.token);
+              console.log("Signin with Email-Password successful");
               this.router.navigate(['/home']);
             },
             error => console.log(error)
           );
-          console.log("Signin with Email-Password successful");
         }
       } catch (error) {
         console.log(error);
@@ -73,12 +73,12 @@ export class SigninComponent implements OnInit {
       if (!snapshot.empty) {
         this.signinService.auth({email}).subscribe(
           res => {
-            localStorage.setItem('token', res.token);
+            localStorage.setItem("token", res.token);
+            console.log("Signin with Google successful");
             this.router.navigate(['/home']);
           },
           error => console.log(error)
         );
-        console.log("Signin with Google successful");
       } else {
         console.log("User does not exist. Sign up");
       }

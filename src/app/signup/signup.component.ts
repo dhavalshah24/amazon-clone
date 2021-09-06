@@ -76,7 +76,6 @@ export class SignupComponent implements OnInit {
         }
         this.signupService.signup(data).subscribe(
           res => {
-            console.log(res);
             console.log("Signup with Email-Password successful");
             this.router.navigate(['/signin']);
           },
@@ -115,7 +114,6 @@ export class SignupComponent implements OnInit {
           }
           this.signupService.signup(data).subscribe(
             res => {
-              console.log(res);
               console.log("Signup with Google successful");
               this.router.navigate(['/signin']);
             },
