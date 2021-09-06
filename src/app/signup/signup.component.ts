@@ -5,6 +5,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import { SignupService } from '../services/signup/signup.service';
 
 @Component({
   selector: 'app-signup',
@@ -13,7 +14,7 @@ import { Router } from '@angular/router';
 })
 export class SignupComponent implements OnInit {
 
-  constructor(private fb: FormBuilder, private router: Router, private fireAuth: AngularFireAuth, private db: AngularFirestore) { }
+  constructor(private fb: FormBuilder, private signupService: SignupService, private router: Router, private fireAuth: AngularFireAuth, private db: AngularFirestore) { }
 
   ngOnInit(): void {
   }
@@ -65,16 +66,22 @@ export class SignupComponent implements OnInit {
       try {
         const { email, password, name } = this.signupForm.value;
         const result = await this.fireAuth.createUserWithEmailAndPassword(email, password);
-        const username = result.user?.email?.split("@")[0]
-        await this.db.collection("users").doc(result?.user?.uid).set({
-          username,
-          email,
+        const username = result.user?.email?.split("@")[0];
+        const data = {
+          username: username,
           fullName: name,
-          userType
-        });
-        console.log("Signup with Email-Password successful");
-        this.router.navigate(['/home']);
-
+          email: result?.user?.email,
+          userType,
+          id: result.user?.uid
+        }
+        this.signupService.signup(data).subscribe(
+          res => {
+            console.log(res);
+            console.log("Signup with Email-Password successful");
+            this.router.navigate(['/signin']);
+          },
+          error => console.log(error)
+        );
       } catch (error) {
         console.log(error);
       }
@@ -99,14 +106,21 @@ export class SignupComponent implements OnInit {
           if (this.signupForm.value.seller) userType.push("seller");
 
           const username = result.user?.email?.split("@")[0];
-          await this.db.collection("users").doc(result?.user?.uid).set({
+          const data = {
             username: username,
             fullName: result?.user?.displayName,
             email: result?.user?.email,
-            userType
-          });
-          console.log("Signup with Google successful");
-          this.router.navigate(['/home']);
+            userType,
+            id: result.user?.uid
+          }
+          this.signupService.signup(data).subscribe(
+            res => {
+              console.log(res);
+              console.log("Signup with Google successful");
+              this.router.navigate(['/signin']);
+            },
+            error => console.log(error)
+          );
         } else {
           console.log("Email is already in use");
 
