@@ -31,16 +31,21 @@ img {
     margin-top: 10px;
 }
 
-textarea {
+.form-group input, select, textarea {
     border: 0.5px solid gray;
 }
 
-.form-group input {
-    height: 30px;
-    border: 0.5px solid gray;
+.inputFields input {
+    height: 30px;   
 }
 
-.inputFields input:focus, textarea:focus {
+
+.image input {
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.redBorder input:focus, textarea:focus, select:focus {
     border: 0.1px solid hsla(0, 86%, 45%, 0.959);
     box-shadow: 0 0 10px hsla(0, 86%, 45%, 0.959);
 }
@@ -55,7 +60,7 @@ textarea {
     background: #f0c14b;
     width: 100%;
     margin-top: 20px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     height: 30px;
     border: 1px solid;
     border-color: #a88734 #9c7e31 #846a29;

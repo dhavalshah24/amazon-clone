@@ -1,0 +1,63 @@
+<div class="container">
+    <img src="https://www.doorwaysva.org/wp-content/uploads/2020/08/amazon-logo-transparent.png" alt="amazon logo">
+    <form [formGroup]="addProductForm">
+        <div class="form-group">
+
+            <div class="header">
+                <p>Create Account</p>
+            </div>
+
+            <div class="inputFields redBorder">
+                <label for="name">Product name</label>
+                <input type="text" class="form-control" formControlName="name" id="name" name="name" autocomplete="off"
+                    required>
+                <small class="text-danger" [class.d-none]="name && (name.valid || name.untouched)">Name is
+                    required</small>
+            </div>
+
+            <div class="inputFields redBorder">
+                <label for="description">Description</label>
+                <textarea type="text" class="form-control" formControlName="description" id="description"
+                    name="description" autocomplete="off" required></textarea>
+                <small class="text-danger"
+                    [class.d-none]="description && (description.valid || description.untouched)">Description is
+                    required</small>
+            </div>
+
+            <div class="inputFields redBorder">
+                <label for="price">Price</label>
+                <input type="text" class="form-control" formControlName="price" id="price" name="price" autocomplete="off" required>
+                <small class="text-danger" [class.d-none]="price && (price.valid || price.untouched)">Price is
+                    required</small>
+            </div>
+
+            <div class="inputFields redBorder">
+                <label for="category">Category</label>
+                <select name="category" id="category" class="form-control" formControlName="category">
+                    <option *ngFor="let c of categories">{{c}}</option>
+                </select>
+                <small class="text-danger" [class.d-none]="category && (category.valid || category.untouched)">Category is
+                    required</small>
+            </div>
+
+            <div class="inputFields redBorder image">
+                <label for="image">Image</label>
+                <input type="file" class="form-control" id="image" name="image" (change)="onFileSelect($event)" required>
+                <small class="text-danger" [class.d-none]="image && (image.valid || image.untouched)">Image is
+                    required</small>
+            </div>
+
+            <div class="inputFields">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" formControlName="featured" value="featured"
+                        id="featured">
+                    <label class="form-check-label" for="featured">
+                        Featured
+                    </label>
+                </div>
+            </div>
+
+            <button class="btn" type="submit" (click)="addProduct()">Add Product</button>
+        </div>
+    </form>
+</div>

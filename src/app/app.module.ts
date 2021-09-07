@@ -13,6 +13,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
 import { HomeComponent } from './home/home.component';
 import { AddCouponComponent } from './add-coupon/add-coupon.component';
+import { AddProductComponent } from './add-product/add-product.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { AddCouponComponent } from './add-coupon/add-coupon.component';
     SignupComponent,
     SigninComponent,
     HomeComponent,
-    AddCouponComponent
+    AddCouponComponent,
+    AddProductComponent
   ],
   imports: [
     BrowserModule,
