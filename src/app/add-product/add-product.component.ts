@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { ProductsService } from '../services/products/products.service';
 
 @Component({
   selector: 'app-add-product',
@@ -8,7 +9,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 })
 export class AddProductComponent implements OnInit {
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private productsService: ProductsService) { }
 
   ngOnInit(): void {
   }
@@ -53,12 +54,15 @@ export class AddProductComponent implements OnInit {
   addProduct() {
     if (this.name?.valid && this.description?.valid && this.price?.valid && this.category?.valid && this.image?.valid) {
 
-      console.log(this.addProductForm.value);
       const formData = new FormData();
       Object.entries(this.addProductForm.value).forEach(
         ([key, value]: any[]) => {
           formData.set(key, value);
         }
+      );
+      this.productsService.addProduct(formData).subscribe(
+        res => console.log(res),
+        error => console.log(error)
       );
     } else {
       alert("Details are invalid");
