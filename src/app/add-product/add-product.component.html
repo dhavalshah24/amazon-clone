@@ -27,14 +27,13 @@
             <div class="inputFields redBorder">
                 <label for="price">Price</label>
                 <input type="text" class="form-control" formControlName="price" id="price" name="price" autocomplete="off" required>
-                <small class="text-danger" [class.d-none]="price && (price.valid || price.untouched)">Price is
-                    required</small>
+                <small class="text-danger" *ngIf="price && price.invalid && price.touched">{{getPriceError()}}</small>
             </div>
 
             <div class="inputFields redBorder">
                 <label for="category">Category</label>
                 <select name="category" id="category" class="form-control" formControlName="category">
-                    <option *ngFor="let c of categories">{{c}}</option>
+                    <option *ngFor="let c of categories" value="{{c.id}}">{{c.name}}</option>
                 </select>
                 <small class="text-danger" [class.d-none]="category && (category.valid || category.untouched)">Category is
                     required</small>
