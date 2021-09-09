@@ -17,6 +17,7 @@ img {
     margin: auto;
     margin-top: -40px;
     padding: 10px 20px;
+    padding-bottom: 30px;
 }
 
 .header p {
@@ -55,7 +56,6 @@ textarea {
     background: #f0c14b;
     width: 100%;
     margin-top: 20px;
-    margin-bottom: 10px;
     height: 30px;
     border: 1px solid;
     border-color: #a88734 #9c7e31 #846a29;

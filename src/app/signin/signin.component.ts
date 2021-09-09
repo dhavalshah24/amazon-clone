@@ -50,6 +50,7 @@ export class SigninComponent implements OnInit {
           this.signinService.auth({email}).subscribe(
             res => {
               localStorage.setItem("token", res.token);
+              localStorage.setItem("email", email);
               console.log("Signin with Email-Password successful");
               this.router.navigate(['/home']);
             },
@@ -64,16 +65,19 @@ export class SigninComponent implements OnInit {
       alert("Details are invalid")
     }
   }
-
   async signinWithGoogle() {
     try {
+      let email:any;
       const result = await this.fireAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-      const email = result.user?.email;
+      if(result.user?.email) {
+        email = result.user.email
+      }
       const snapshot = await this.db.collection("users").ref.where("email", "==", email).get();
       if (!snapshot.empty) {
         this.signinService.auth({email}).subscribe(
           res => {
             localStorage.setItem("token", res.token);
+            localStorage.setItem("email", email)
             console.log("Signin with Google successful");
             this.router.navigate(['/home']);
           },

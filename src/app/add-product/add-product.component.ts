@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ProductsService } from '../services/products/products.service';
 
 @Component({
@@ -9,7 +10,7 @@ import { ProductsService } from '../services/products/products.service';
 })
 export class AddProductComponent implements OnInit {
 
-  constructor(private fb: FormBuilder, private productsService: ProductsService) { }
+  constructor(private fb: FormBuilder, private productsService: ProductsService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -61,11 +62,18 @@ export class AddProductComponent implements OnInit {
         }
       );
       this.productsService.addProduct(formData).subscribe(
-        res => console.log(res),
+        res => {
+          console.log(res);
+          this.addProductForm.reset();
+        },
         error => console.log(error)
       );
     } else {
       alert("Details are invalid");
     }
+  }
+
+  navigate() {
+    this.router.navigate(["/home"]);
   }
 }

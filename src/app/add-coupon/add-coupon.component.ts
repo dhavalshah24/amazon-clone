@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { CouponsService } from '../services/coupons/coupons.service';
 
 @Component({
@@ -9,7 +10,7 @@ import { CouponsService } from '../services/coupons/coupons.service';
 })
 export class AddCouponComponent implements OnInit {
 
-  constructor(private fb: FormBuilder, private couponsService: CouponsService) { }
+  constructor(private fb: FormBuilder, private couponsService: CouponsService, private router:Router) { }
 
   ngOnInit(): void {
   }
@@ -23,12 +24,15 @@ export class AddCouponComponent implements OnInit {
   get coupon() {
     return this.addCouponForm.get("coupon");
   }
+  get discountRate() {
+    return this.addCouponForm.get("discountRate");
+  }
   get description() {
     return this.addCouponForm.get("description");
   }
 
   async addCoupon() {
-    if(this.coupon?.valid && this.description?.valid) {
+    if(this.coupon?.valid && this.discountRate?.hasError && this.discountRate.value && this.discountRate.value<101 && this.description?.valid) {
       try {
         const {coupon, discountRate, description} = this.addCouponForm.value;
         const data = {
@@ -37,7 +41,10 @@ export class AddCouponComponent implements OnInit {
           description
         };
         this.couponsService.addCoupon(data).subscribe(
-          res => console.log(res),
+          res => {
+            console.log(res);
+            this.addCouponForm.reset();
+          },
           error => console.log(error)
         );
       } catch (error) {
@@ -47,5 +54,9 @@ export class AddCouponComponent implements OnInit {
     } else {
       alert("Details are invalid");
     }
+  }
+
+  navigate() {
+    this.router.navigate(["/home"]);
   }
 }

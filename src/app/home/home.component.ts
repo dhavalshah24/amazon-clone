@@ -43,7 +43,8 @@ export class HomeComponent implements OnInit {
     try {
       this.fireAuth.signOut().then(() => {
         console.log("Logout successful");
-        localStorage.removeItem("token")
+        localStorage.removeItem("token");
+        localStorage.removeItem("email");
         this.router.navigate(['/signin']);
       })
     } catch (error) {
