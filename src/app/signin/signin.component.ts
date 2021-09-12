@@ -72,20 +72,29 @@ export class SigninComponent implements OnInit {
       if(result.user?.email) {
         email = result.user.email
       }
-      const snapshot = await this.db.collection("users").ref.where("email", "==", email).get();
-      if (!snapshot.empty) {
-        this.signinService.auth({email}).subscribe(
-          res => {
-            localStorage.setItem("token", res.token);
-            localStorage.setItem("email", email)
-            console.log("Signin with Google successful");
-            this.router.navigate(['/home']);
-          },
-          error => console.log(error)
-        );
-      } else {
-        console.log("User does not exist. Sign up");
-      }
+      let response = false;
+      await this.signinService.auth({ email }).subscribe(
+        res => response = res.success,
+        error => console.log(error)
+      )
+      const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+      wait(1000).then(() => {
+        
+        if (response) {
+          this.signinService.auth({email}).subscribe(
+            res => {
+              localStorage.setItem("token", res.token);
+              localStorage.setItem("email", email)
+              console.log("Signin with Google successful");
+              this.router.navigate(['/home']);
+            },
+            error => console.log(error)
+          );
+        } else {
+          console.log("User does not exist. Sign up");
+        }
+      })
+      
     } catch (error) {
       console.log(error);
     }

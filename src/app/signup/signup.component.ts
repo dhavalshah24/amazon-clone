@@ -6,6 +6,7 @@ import 'firebase/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { SignupService } from '../services/signup/signup.service';
+import { SigninService } from '../services/signin/signin.service';
 
 @Component({
   selector: 'app-signup',
@@ -14,7 +15,7 @@ import { SignupService } from '../services/signup/signup.service';
 })
 export class SignupComponent implements OnInit {
 
-  constructor(private fb: FormBuilder, private signupService: SignupService, private router: Router, private fireAuth: AngularFireAuth, private db: AngularFirestore) { }
+  constructor(private fb: FormBuilder, private signinService: SigninService, private signupService: SignupService, private router: Router, private fireAuth: AngularFireAuth, private db: AngularFirestore) { }
 
   ngOnInit(): void {
   }
@@ -97,32 +98,38 @@ export class SignupComponent implements OnInit {
 
         const result = await this.fireAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
         const email = result.user?.email;
-        const snapshot = await this.db.collection("users").ref.where("email", "==", email).get();
+        let response = false;
+        await this.signinService.auth({ email }).subscribe(
+          res => response = res.success,
+          error => console.log(error)
+        )
+        const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+        wait(1000).then(() => {
+          if (!response) {
+            var userType = []
+            if (this.signupForm.value.customer) userType.push("customer");
+            if (this.signupForm.value.seller) userType.push("seller");
 
-        if (snapshot.empty) {
-          var userType = []
-          if (this.signupForm.value.customer) userType.push("customer");
-          if (this.signupForm.value.seller) userType.push("seller");
+            const username = result.user?.email?.split("@")[0];
+            const data = {
+              username: username,
+              fullName: result?.user?.displayName,
+              email: result?.user?.email,
+              userType,
+              id: result.user?.uid
+            }
+            this.signupService.signup(data).subscribe(
+              res => {
+                console.log("Signup with Google successful");
+                this.router.navigate(['/signin']);
+              },
+              error => console.log(error)
+            );
+          } else {
+            console.log("Email is already in use");
 
-          const username = result.user?.email?.split("@")[0];
-          const data = {
-            username: username,
-            fullName: result?.user?.displayName,
-            email: result?.user?.email,
-            userType,
-            id: result.user?.uid
           }
-          this.signupService.signup(data).subscribe(
-            res => {
-              console.log("Signup with Google successful");
-              this.router.navigate(['/signin']);
-            },
-            error => console.log(error)
-          );
-        } else {
-          console.log("Email is already in use");
-
-        }
+        })
 
       } catch (error) {
         console.log(error);
